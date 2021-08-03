@@ -5,9 +5,13 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
 import config from './config';
+import { connectMongo } from './database/mongoConfig';
 
 // Instantiate the app
 const app = express();
+
+// mongodb connection
+connectMongo();
 
 app.use(helmet());
 

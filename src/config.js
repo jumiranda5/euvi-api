@@ -3,10 +3,8 @@ dotenv.config();
 
 /*eslint no-process-env: 0*/
 const environment = process.env.NODE_ENV || 'development';
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 let ENV;
-
-console.log(`environment: ${environment}`);
 
 if (environment === "development") {
   ENV = process.env.ENVIRONMENT_DEV;
@@ -18,7 +16,12 @@ else {
 const config = {
 
   PORT,
-  ENV
+  ENV,
+  DB : {
+    db_user: process.env.DB_USER,
+    db_pass: process.env.DB_PASS,
+    db_name: process.env.DB_NAME,
+  },
 
 };
 
