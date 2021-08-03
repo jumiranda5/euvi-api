@@ -1,0 +1,6 @@
+{
+  "name": "euvi-api",
+  "description": "Euvi app server",
+  "repository": "https://github.com/jumiranda5/euvi-api",
+  "keywords": ["server", "api", "node"]
+}
