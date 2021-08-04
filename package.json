@@ -10,7 +10,7 @@
     "test:watch": "npm run test -- --watch",
     "open:src": "DEBUG=app:* nodemon --exec babel-node ./src/app.js",
     "start-message": "DEBUG=app:* babel-node ./buildScripts/startMessege",
-    "dev": "npm-run-all --parallel start-message open:src lint:watch test:watch",
+    "dev": "npm-run-all --parallel start-message open:src lint:watch",
     "clean-dist": "rimraf ./dist && mkdir dist",
     "build-message": "DEBUG=app:* babel-node ./buildScripts/buildMessage",
     "prebuild": "npm-run-all clean-dist test lint build-message",
@@ -29,6 +29,7 @@
     "debug": "^4.3.2",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-validator": "^6.12.1",
     "helmet": "^4.6.0",
     "mongoose": "^5.13.5",
     "morgan": "^1.10.0"
