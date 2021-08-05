@@ -1,4 +1,4 @@
-import User from '../database/userModel';
+import User from '../database/models/userModel';
 import { isInputDataValid } from '../helpers/inputValidator';
 import chalk from 'chalk';
 const debug = require('debug')('app:search');

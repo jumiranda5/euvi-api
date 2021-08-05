@@ -1,4 +1,4 @@
-import User from '../database/userModel';
+import User from '../database/models/userModel';
 import chalk from 'chalk';
 import { isInputDataValid } from '../helpers/inputValidator';
 import { getUsernameFromEmail, getUserSearchKeys } from '../helpers/userHelper';

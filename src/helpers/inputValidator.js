@@ -49,10 +49,22 @@ export const validateSearch = [
     .trim()
 ];
 
+/* TODO:
+export const validateFollow = [
 
-/* -------------------------------------------------
-                VALIDATION FUNCTIONS
- -------------------------------------------------- */
+  param('to')
+    .isUUID()
+    .withMessage('Invalid user id')
+    .trim()
+    .escape()
+
+];
+
+*/
+
+/* ================================================
+                VALIDATION FUNCTION
+ ================================================== */
 
 export const isInputDataValid = (req) => {
 

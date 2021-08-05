@@ -1,4 +1,4 @@
-import User from '../database/userModel';
+import User from '../database/models/userModel';
 const debug = require('debug')('app:delete-user');
 const debugDb = require('debug')('app:database');
 
