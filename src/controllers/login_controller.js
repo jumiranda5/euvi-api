@@ -23,6 +23,7 @@ export const login = async (req, res) => {
     const err = new Error('Validation error.');
     err.status = 422;
     res.status(err.status || 500);
+    return res.send({ message: err.message });
   }
 
   // check if user exists on db
@@ -111,11 +112,18 @@ export const checkIfUserExists = async (userId) => {
 
   try {
     const user = await User.findById(userId).exec();
-    debugDb(`user found: ${chalk.green(user.username)}`);
-    return true;
+    if (user !== null) {
+      debugDb(`user found: ${chalk.green(user.username)}`);
+      return true;
+    }
+    else {
+      const err = new Error('Not found.');
+      err.status = 404;
+      err.message = 'User not found.';
+      throw err;
+    }
   }
   catch(error) {
-    debugDb(`user not found.`);
     debugDb(error.message);
     return false;
   }

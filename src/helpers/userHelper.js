@@ -13,11 +13,11 @@ export const getUserSearchKeys = async (username, name) => {
   debug(username);
 
   // name
-  const nameParts = name.split('');
+  const nameParts = name.toLowerCase().split('');
   const nameFirstKey = `${nameParts[0]}${nameParts[1]}`;
 
   // username
-  const usernameParts = username.split('');
+  const usernameParts = username.toLowerCase().split('');
   const usernameFirstKey = `${usernameParts[0]}${usernameParts[1]}`;
 
   // Keys
@@ -48,13 +48,10 @@ export const getUserSearchKeys = async (username, name) => {
 
     debug(searchKeys);
 
-    resolve();
+    resolve(searchKeys);
   });
-  loopResult.then();
 
-
-
-  return searchKeys;
+  return await loopResult;
 
 };
 
