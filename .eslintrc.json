@@ -19,7 +19,7 @@
   "rules": {
     "no-console": 1,
     "no-process-env": 1,
-    "dot-location": 1,
+    "dot-location": 0,
     "no-invalid-this": 2,
     "no-unused-vars": [1, { "argsIgnorePattern": "next" }],
     "semi": [1, "always"],

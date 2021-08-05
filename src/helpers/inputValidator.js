@@ -42,10 +42,19 @@ export const validateEditUser = [
     .withMessage('Invalid url')
 ];
 
+export const validateSearch = [
+  body('search')
+    .matches(/^[^"<>\\{}[\]]{1,200}$/u)
+    .withMessage('Invalid search')
+    .trim()
+];
 
-/* __________ VALIDATION FUNCTIONS __________ */
 
-export const isSignUpDataValid = (req) => {
+/* -------------------------------------------------
+                VALIDATION FUNCTIONS
+ -------------------------------------------------- */
+
+export const isInputDataValid = (req) => {
 
   const validationErrors = validationResult(req);
 
@@ -56,21 +65,6 @@ export const isSignUpDataValid = (req) => {
   else {
     debug(validationErrors.array());
     return false;
-  }
-
-};
-
-export const isEditUserDataValid = (req) => {
-
-  const validationErrors = validationResult(req);
-
-  if (!validationErrors.isEmpty()) {
-    debug(validationErrors.array());
-    return false;
-  }
-  else {
-    debug('Validation passed!');
-    return true;
   }
 
 };

@@ -1,5 +1,5 @@
 import User from '../database/userModel';
-import { isEditUserDataValid } from '../helpers/inputValidator';
+import { isInputDataValid } from '../helpers/inputValidator';
 import { getUserSearchKeys } from '../helpers/userHelper';
 import chalk from 'chalk';
 const debug = require('debug')('app:edit-profile');
@@ -17,7 +17,7 @@ export const edit_user = async (req, res, next) => {
   debug(`new name: ${chalk.green(name)}`);
 
   // validate input data
-  const isDataValid = isEditUserDataValid(req);
+  const isDataValid = isInputDataValid(req);
   if (!isDataValid) {
     const err = new Error('Validation error.');
     err.status = 422;

@@ -1,6 +1,6 @@
 import User from '../database/userModel';
 import chalk from 'chalk';
-import { isSignUpDataValid } from '../helpers/inputValidator';
+import { isInputDataValid } from '../helpers/inputValidator';
 import { getUsernameFromEmail, getUserSearchKeys } from '../helpers/userHelper';
 const debugDb = require('debug')('app:database');
 const debug = require('debug')('app:login');
@@ -18,7 +18,7 @@ export const login = async (req, res) => {
   };
 
   // Validate input data
-  const isDataValid = isSignUpDataValid(req);
+  const isDataValid = isInputDataValid(req);
   if (!isDataValid) {
     const err = new Error('Validation error.');
     err.status = 422;
