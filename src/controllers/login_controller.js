@@ -2,6 +2,7 @@ import User from '../database/models/userModel';
 import chalk from 'chalk';
 import { isInputDataValid } from '../helpers/inputValidator';
 import { getUsernameFromEmail, getUserSearchKeys } from '../helpers/userHelper';
+import { graphSession } from '../database/graphConfig';
 const debugDb = require('debug')('app:database');
 const debug = require('debug')('app:login');
 
@@ -30,6 +31,7 @@ export const login = async (req, res) => {
   const isUserSaved = await checkIfUserExists(userData.userId);
 
   if (isUserSaved) {
+    // Todo: check if exists on graph db => if not => create
     // if user exists => login
     debug('User already exist... authenticate');
     return res.json({message: 'User exists => init authentication...'});
@@ -48,12 +50,16 @@ export const login = async (req, res) => {
         _id: userData.userId,
         username: username,
         name: userData.name,
-        email: userData.email,
+        avatar: userData.avatar,
         searchKeys: searchKeys
       };
 
+
       // Save user on db
       const newUser = await createUser(userObject);
+
+      // Save user on graph
+      await createUserNode(userObject);
 
       // send welcome email
       // todo...
@@ -126,6 +132,36 @@ export const checkIfUserExists = async (userId) => {
   catch(error) {
     debugDb(error.message);
     return false;
+  }
+
+};
+
+
+/* ______________ GRAPH DATABASE ______________ */
+
+const createUserNode = async (userObject) => {
+
+  const userId = userObject._id;
+  const username = userObject.username;
+  const name = userObject.name;
+  const avatar = userObject.avatar;
+
+  try {
+    const result = await graphSession.readTransaction(tx =>
+      tx.run(`CREATE (n:User{
+        userId: '${userId}',
+        username: '${username}',
+        name: '${name}',
+        avatar: '${avatar}'
+      }) RETURN n`)
+    );
+    debug(JSON.stringify(result));
+  }
+  catch (error) {
+    debug(error);
+  }
+  finally {
+    await graphSession.close();
   }
 
 };

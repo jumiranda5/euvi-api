@@ -30,7 +30,6 @@ export const getUserSearchKeys = async (username, name) => {
       if (i > 1) {
         const lastIndex = usernameSearchKeys.length - 1;
         const newKey = `${usernameSearchKeys[lastIndex]}${usernameParts[i]}`;
-        debug(`New username search key: ${newKey}`);
         usernameSearchKeys.push(newKey);
         if(!searchKeys.includes(newKey)) searchKeys.push(newKey);
       }

@@ -33,7 +33,7 @@
     "helmet": "^4.6.0",
     "mongoose": "^5.13.5",
     "morgan": "^1.10.0",
-    "redisgraph.js": "^2.3.0"
+    "neo4j-driver": "^4.3.2"
   },
   "engines": {
     "debug": "^4.3.2",

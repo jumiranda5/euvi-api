@@ -6,8 +6,9 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
 import config from './config';
+import mongoose from 'mongoose';
 import { connectMongo } from './database/mongoConfig';
-import { connectRedis } from './database/redisConfig';
+import { checkGraphConnection, closeGraphDriver } from './database/graphConfig';
 
 const corsConfig = {
   origin: [
@@ -23,7 +24,7 @@ const app = express();
 
 // database connection
 connectMongo();
-connectRedis();
+checkGraphConnection();
 
 app.use(helmet());
 
@@ -61,4 +62,21 @@ app.listen(port, (err) => {
   } else {
     debug(`Server is listening on port ${chalk.green(port)}`);
   }
+});
+
+// Disconnect dbs
+process.on('SIGINT', () => {
+
+  closeGraphDriver().then(() => {
+
+    mongoose.connection.close(() => {
+      debug("Mongoose default connection is disconnected due to application termination");
+    });
+
+  }).then(() => {
+
+    debug("Exiting app...");
+    process.exit(0);
+
+  });
 });

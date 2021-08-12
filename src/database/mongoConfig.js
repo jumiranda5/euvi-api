@@ -36,11 +36,4 @@ export const connectMongo = () => {
     debug("Mongoose default connection is disconnecting");
   });
 
-//  process.on('SIGINT', () => {
-//    mongo.close(() => {
-//        debug("Mongoose default connection is disconnected due to application termination");
-//        process.exit(0);
-//    });
-//  });
-
 };
