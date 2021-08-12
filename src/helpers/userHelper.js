@@ -1,5 +1,24 @@
 import chalk from 'chalk';
-const debug = require('debug')('app:helper_user');
+const debug = require('debug')('app:user_helper');
+
+export const generateUserObject = async (userData) => {
+
+  // create username from email
+  const username = getUsernameFromEmail(userData.email);
+
+  // create search keys
+  const searchKeys = await getUserSearchKeys(username, userData.name);
+
+  const userObject = {
+    _id: userData.userId,
+    username: username,
+    name: userData.name,
+    avatar: userData.avatar,
+    searchKeys: searchKeys
+  };
+
+  return userObject;
+};
 
 export const getUsernameFromEmail = (email) => {
   const array = email.split('@');
@@ -39,7 +58,6 @@ export const getUserSearchKeys = async (username, name) => {
       if (i !== 0 && i !== 1) {
         const lastIndex = nameKeys.length - 1;
         const newKey = `${nameKeys[lastIndex]}${nameParts[i]}`;
-        debug(`New name search key: ${newKey}`);
         nameKeys.push(newKey);
         if(!searchKeys.includes(newKey)) searchKeys.push(newKey);
       }

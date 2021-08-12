@@ -11,7 +11,7 @@ const user = graph_username;
 const password = graph_pass;
 
 const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
-export const graphSession = driver.session();
+export const graphDriver = driver;
 
 export const checkGraphConnection = async () => {
   const driverConnection = await driver.verifyConnectivity();
