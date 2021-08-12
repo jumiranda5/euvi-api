@@ -32,7 +32,8 @@
     "express-validator": "^6.12.1",
     "helmet": "^4.6.0",
     "mongoose": "^5.13.5",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "redisgraph.js": "^2.3.0"
   },
   "engines": {
     "debug": "^4.3.2",

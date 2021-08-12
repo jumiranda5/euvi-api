@@ -7,6 +7,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import config from './config';
 import { connectMongo } from './database/mongoConfig';
+import { connectRedis } from './database/redisConfig';
 
 const corsConfig = {
   origin: [
@@ -20,8 +21,9 @@ const corsConfig = {
 // Instantiate the app
 const app = express();
 
-// mongodb connection
+// database connection
 connectMongo();
+connectRedis();
 
 app.use(helmet());
 
