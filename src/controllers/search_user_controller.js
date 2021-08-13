@@ -1,8 +1,7 @@
-import User from '../database/models/userModel';
 import { isInputDataValid } from '../helpers/inputValidator';
+import { searchUser } from '../database/mongoCRUD/read_mongo';
 import chalk from 'chalk';
 const debug = require('debug')('app:search');
-const debugDb = require('debug')('app:database');
 
 export const search_user = async (req, res, next) => {
 
@@ -31,24 +30,4 @@ export const search_user = async (req, res, next) => {
   else {
     return res.json({message: 'No users found.'});
   }
-};
-
-
-const searchUser = async (search, page) => {
-
-  //const query = [{ $match: {"searchKeys": search} }];
-  //const users = await User.aggregate(query); => aggregate vs find??
-
-  debug(`Page: ${page}`);
-  const nPerPage = 25;
-
-  const users = await User.find({searchKeys: search},
-                                  ['_id', 'username', 'name', 'avatar'])
-                          .skip(page > 0 ? ( ( page - 1 ) * nPerPage ) : 0)
-                          .limit(nPerPage)
-                          .exec();
-
-  debugDb(users);
-  return users;
-
 };

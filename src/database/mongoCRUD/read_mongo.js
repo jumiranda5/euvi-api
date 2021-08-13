@@ -23,3 +23,20 @@ export const checkIfUserExists = async (userId) => {
   }
 
 };
+
+
+export const searchUser = async (search, page) => {
+
+  debug(`Page: ${page}`);
+  const nPerPage = 25;
+
+  const users = await User.find({searchKeys: search},
+                                  ['_id', 'username', 'name', 'avatar'])
+                          .skip(page > 0 ? ( ( page - 1 ) * nPerPage ) : 0)
+                          .limit(nPerPage)
+                          .exec();
+
+  debug(users);
+  return users;
+
+};

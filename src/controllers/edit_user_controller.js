@@ -1,9 +1,9 @@
-import User from '../database/models/userModel';
 import { isInputDataValid } from '../helpers/inputValidator';
 import { getUserSearchKeys } from '../helpers/userHelper';
+import { updateUser } from '../database/mongoCRUD/update_mongo';
 import chalk from 'chalk';
+import { updateUserNode } from '../database/neo4jCRUD/update_neo4j';
 const debug = require('debug')('app:edit-profile');
-const debugDb = require('debug')('app:database');
 
 export const edit_user = async (req, res, next) => {
 
@@ -25,9 +25,7 @@ export const edit_user = async (req, res, next) => {
     return res.send({ message: err.message });
   }
 
-
   // TODO: upload image or keep url from google
-
 
   // update user on db
 
@@ -48,6 +46,7 @@ export const edit_user = async (req, res, next) => {
 
     // Update user on db
     const editedUser = await updateUser(userObject);
+    await updateUserNode(userObject);
 
     return res.json(editedUser);
 
@@ -59,43 +58,4 @@ export const edit_user = async (req, res, next) => {
 
 };
 
-/* ______________ DATABASE ______________ */
 
-const updateUser = async (userData) => {
-
-  const userId = userData._id;
-  const username = userData.username;
-  const name = userData.name;
-  const avatar = userData.avatar;
-  const searchKeys = userData.searchKeys;
-
-  const query = { _id: userId};
-  const options = { new: true };
-  let update;
-
-  avatar === "" ?
-  update = { $set: { username, name, searchKeys }} :
-  update = { $set: { avatar, username, name, searchKeys }};
-
-  try {
-    debugDb(`Updating user...`);
-    const user = await User.findOneAndUpdate(query, update, options).exec();
-
-    debugDb(`New user info =>
-           username: ${user.username},
-           name: ${user.name},
-           avatar: ${user.avatar}`);
-
-    return user;
-  }
-  catch (error) {
-    if (error.name === 'MongoError' && error.code === 11000) {
-      const err = new Error(`Username must be unique`);
-      err.status = 422 ;
-      debugDb(err.message);
-      throw err;
-    }
-    else throw error;
-  }
-
-};
