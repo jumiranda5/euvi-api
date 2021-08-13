@@ -11,7 +11,7 @@ export const createUserNode = async (userObject) => {
   const graphSession = graphDriver.session();
 
   try {
-    const result = await graphSession.readTransaction(tx =>
+    const result = await graphSession.writeTransaction(tx =>
       tx.run(`CREATE (n:User{
         userId: '${userId}',
         username: '${username}',
@@ -23,6 +23,31 @@ export const createUserNode = async (userObject) => {
   }
   catch (error) {
     debug(error);
+    throw error;
+  }
+  finally {
+    await graphSession.close();
+  }
+
+};
+
+export const createFollow = async (from, to) => {
+
+  const graphSession = graphDriver.session();
+
+  try {
+    await graphSession.writeTransaction(tx =>
+      tx.run(`
+        MATCH (from:User), (to:User)
+        WHERE from.userId = '${from}' AND to.userId = '${to}'
+        MERGE (from)-[r:follows]->(to)
+      `)
+    );
+    debug(`Follow created`);
+  }
+  catch (error) {
+    debug(error);
+    throw error;
   }
   finally {
     await graphSession.close();

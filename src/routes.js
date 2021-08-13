@@ -12,7 +12,7 @@ import { search_user } from './controllers/search_user_controller';
 import { follow } from './controllers/follow';
 import { followers } from './controllers/followers';
 import { following } from './controllers/following';
-import { unfollow } from './controllers/delete_follow';
+import { unfollow } from './controllers/unfollow';
 
 
 // todo: middleware to validate api key
