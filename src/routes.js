@@ -8,6 +8,7 @@ import { login } from './controllers/login_controller';
 import { edit_user } from './controllers/edit_user_controller';
 import { delete_account } from './controllers/delete_account_controller';
 import { search_user } from './controllers/search_user_controller';
+import { profile } from './controllers/profile_controller';
 // follow
 import { follow } from './controllers/follow';
 import { followers } from './controllers/followers';
@@ -30,6 +31,7 @@ router.post('/api/login', validateSignup, login);
 
 /* ------- USER ------- */
 
+router.get('/api/user/profile/:userId/:visitor', profile);
 router.post('/api/user/edit-user/:userId', validateEditUser, edit_user);
 router.post('/api/user/delete-account/:userId', delete_account);
 router.post('/api/user/search/:userId/:page', validateSearch, search_user);

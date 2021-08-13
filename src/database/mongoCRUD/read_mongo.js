@@ -24,6 +24,31 @@ export const checkIfUserExists = async (userId) => {
 
 };
 
+export const findUser = async (userId) => {
+
+  try {
+
+    const userObj = ['_id', 'username', 'name', 'avatar', 'isPrivate'];
+
+    const user = await User.findById(userId, userObj).exec();
+
+    if (user !== null) {
+      debug(`User found: ${chalk.green(user.username)}`);
+      return user;
+    }
+    else {
+      const err = new Error('Not found.');
+      err.status = 404;
+      err.message = 'User not found.';
+      throw err;
+    }
+  }
+  catch(error) {
+    debug(error.message);
+    throw error;
+  }
+};
+
 
 export const searchUser = async (search, page) => {
 
