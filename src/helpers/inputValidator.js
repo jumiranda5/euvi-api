@@ -3,7 +3,7 @@ const debug = require('debug')('app:validator');
 
 /*eslint dot-location: 0*/
 
-export const validateSignup = [
+export const validateLogin = [
 
   body('email')
     .isEmail()

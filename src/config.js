@@ -3,7 +3,7 @@ dotenv.config();
 
 /*eslint no-process-env: 0*/
 const environment = process.env.NODE_ENV || 'development';
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 let ENV;
 
 if (environment === "development") {

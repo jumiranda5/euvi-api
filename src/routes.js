@@ -5,6 +5,7 @@ const router = express.Router();
 // User
 import { home } from './controllers/home_controller';
 import { login } from './controllers/login_controller';
+import { signup } from './controllers/signup_controller';
 import { edit_user } from './controllers/edit_user_controller';
 import { delete_account } from './controllers/delete_account_controller';
 import { search_user } from './controllers/search_user_controller';
@@ -17,7 +18,7 @@ import { unfollow } from './controllers/unfollow';
 
 
 // todo: middleware to validate api key
-import { validateSignup, validateEditUser, validateSearch } from './helpers/inputValidator';
+import { validateLogin, validateEditUser, validateSearch } from './helpers/inputValidator';
 
 // todo: middleware to require login
 
@@ -27,7 +28,8 @@ router.get('/', home);
 
 /* ------- AUTH ------- */
 
-router.post('/api/login', validateSignup, login);
+router.post('/api/login', validateLogin, login);
+router.post('/api/signup', validateEditUser, signup);
 
 /* ------- USER ------- */
 

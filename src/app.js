@@ -12,8 +12,8 @@ import { checkGraphConnection, closeGraphDriver } from './database/graphConfig';
 
 const corsConfig = {
   origin: [
-    'http://localhost:5000',
-    'http://127.0.0.1:5000'
+    'http://localhost:3000',
+    'http://127.0.0.1:3000'
   ],
   methods:['GET','POST'],
   credentials: false
@@ -49,7 +49,7 @@ app.use((req, res, next) => {
 
 // Error handler => define as the last app.use callback
 app.use((err, req, res, next) => {
-  res.setHeader('Content-Type', 'application/json'); // Possible fix to doctype error... todo: test
+  res.setHeader('Content-Type', 'application/json'); // Possible fix to doctype error...
   res.status(err.status || 500);
   res.json( { message: err.message });
 });

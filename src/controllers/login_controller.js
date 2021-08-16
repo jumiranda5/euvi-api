@@ -1,8 +1,7 @@
 import { isInputDataValid } from '../helpers/inputValidator';
-import { generateUserObject } from '../helpers/userHelper';
+import { getUsernameFromEmail, generateUserObject } from '../helpers/userHelper';
 import { checkIfUserExists } from '../database/mongoCRUD/read_mongo';
 import { checkIfUserNodeExists } from '../database/neo4jCRUD/read_neo4j';
-import { createUser } from '../database/mongoCRUD/create_mongo';
 import { createUserNode } from '../database/neo4jCRUD/create_neo4j';
 const debug = require('debug')('app:login');
 
@@ -49,23 +48,26 @@ export const login = async (req, res) => {
 
   }
   else {
-    debug('Create user...');
+    debug('User not registered.');
+
+    // Return user object (to edit profile page for user confirmation before signing up)
 
     try {
 
-      // generate user object
-      const userObject = await generateUserObject(userData);
+      const username = await getUsernameFromEmail(userData.email);
 
-      // Save user on db
-      const newUser = await createUser(userObject);
+      const userObject = {
+        userId: userData.userId,
+        username: username,
+        name: userData.name,
+        avatar: userData.avatar,
+      };
 
-      // Save user on graph
-      await createUserNode(userObject);
+      return res.json({
+        message: 'User not found.',
+        user: userObject
+      });
 
-      // send welcome email
-      // todo...
-
-      return res.json(newUser);
     }
     catch (error) {
       res.status(error.status || 500);
