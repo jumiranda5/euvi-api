@@ -20,6 +20,8 @@ export const createUserNode = async (userObject) => {
       }) RETURN n`)
     );
     debug(`Created user node: ${result.records.length}`);
+    if (result.records.length > 0) return true;
+    else return false;
   }
   catch (error) {
     debug(error);

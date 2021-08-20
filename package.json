@@ -15,7 +15,9 @@
     "build-message": "DEBUG=app:* babel-node ./buildScripts/buildMessage",
     "prebuild": "npm-run-all clean-dist test lint build-message",
     "build": "babel src --out-dir dist",
-    "start": "NODE_ENV=production node ./dist/app.js"
+    "start": "NODE_ENV=production node ./dist/app.js",
+    "localtunnel": "lt --port 3000 --subdomain euvi3168461",
+    "share": "npm-run-all --parallel start-message open:src lint:watch localtunnel"
   },
   "repository": {
     "type": "git",
@@ -30,6 +32,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-validator": "^6.12.1",
+    "google-auth-library": "^7.6.2",
     "helmet": "^4.6.0",
     "mongoose": "^5.13.5",
     "morgan": "^1.10.0",

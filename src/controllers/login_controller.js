@@ -1,19 +1,22 @@
 import { isInputDataValid } from '../helpers/inputValidator';
-import { getUsernameFromEmail, generateUserObject } from '../helpers/userHelper';
+import { getUsernameFromEmail } from '../helpers/userHelper';
 import { checkIfUserExists } from '../database/mongoCRUD/read_mongo';
-import { checkIfUserNodeExists } from '../database/neo4jCRUD/read_neo4j';
-import { createUserNode } from '../database/neo4jCRUD/create_neo4j';
+import { verifyToken } from '../helpers/verifyToken';
 const debug = require('debug')('app:login');
 
 export const login = async (req, res) => {
 
   // Input data
   const userData = {
-    userId: req.body.userId.trim(),
+    token: req.body.token,
     email: req.body.email,
     name: req.body.name,
     avatar: req.body.avatarUrl,
   };
+
+  // Verify token
+  const userId = await verifyToken(userData.token);
+  debug(`User id: ${userId}`);
 
   // Validate input data
   const isDataValid = isInputDataValid(req);
@@ -25,24 +28,11 @@ export const login = async (req, res) => {
   }
 
   // check if user exists on db
-  const isUserSaved = await checkIfUserExists(userData.userId);
+  const isUserSaved = await checkIfUserExists(userId);
 
   if (isUserSaved) {
 
-    // check if user node exists on graph db => if not => create
-    const isUserNodeSaved = await checkIfUserNodeExists(userData.userId);
-    debug(`User node: ${isUserNodeSaved}`);
-
-    if (!isUserNodeSaved) {
-      debug('User not found on graph. Creating node...');
-      const userNodeObject = await generateUserObject(userData);
-      await createUserNode(userNodeObject);
-    }
-    else {
-      // user and node exist => login
-      // TODO...
-      debug('User already exist... authenticate');
-    }
+    debug('User already exist... authenticate');
 
     return res.json({message: 'User exists => init authentication...'});
 
@@ -50,22 +40,16 @@ export const login = async (req, res) => {
   else {
     debug('User not registered.');
 
-    // Return user object (to edit profile page for user confirmation before signing up)
-
     try {
 
       const username = await getUsernameFromEmail(userData.email);
 
-      const userObject = {
-        userId: userData.userId,
+      return res.json({
+        message: 'User not found.',
+        userId: userId,
         username: username,
         name: userData.name,
         avatar: userData.avatar,
-      };
-
-      return res.json({
-        message: 'User not found.',
-        user: userObject
       });
 
     }

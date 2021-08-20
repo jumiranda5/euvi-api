@@ -19,6 +19,7 @@ import { unfollow } from './controllers/unfollow';
 
 // todo: middleware to validate api key
 import { validateLogin, validateEditUser, validateSearch } from './helpers/inputValidator';
+import { requireLogin } from './middleware/requireLogin';
 
 // todo: middleware to require login
 
@@ -33,10 +34,10 @@ router.post('/api/signup', validateEditUser, signup);
 
 /* ------- USER ------- */
 
-router.get('/api/user/profile/:userId/:visitor', profile);
-router.post('/api/user/edit-user/:userId', validateEditUser, edit_user);
-router.post('/api/user/delete-account/:userId', delete_account);
-router.post('/api/user/search/:userId/:page', validateSearch, search_user);
+router.get('/api/user/profile/:userId/:visitor', requireLogin, profile);
+router.post('/api/user/edit-user/:userId', [requireLogin, validateEditUser], edit_user);
+router.post('/api/user/delete-account/:userId', requireLogin, delete_account);
+router.post('/api/user/search/:userId/:page', [requireLogin, validateSearch], search_user);
 
 /* ------- FOLLOWS ------- */
 
