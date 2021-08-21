@@ -25,7 +25,8 @@ const config = {
     graph_username: process.env.AURA_USERNAME,
     graph_uri: process.env.AURA_URI
   },
-  CLIENT_ID: process.env.CLIENT_ID
+  CLIENT_ID: process.env.CLIENT_ID,
+  TOKEN_SECRET: process.env.TOKEN_SECRET,
 
 };
 

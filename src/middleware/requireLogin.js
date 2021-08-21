@@ -1,7 +1,8 @@
-import { verifyToken } from '../helpers/verifyToken';
+import { verifyAccessToken } from '../helpers/verifyToken';
 
 export function requireLogin(req, res, next) {
 
+  /*
   const token = req.body.token;
 
   if (token) {
@@ -13,5 +14,9 @@ export function requireLogin(req, res, next) {
     err.status = 401;
     return next(err);
   }
+  */
+
+  // todo
+  return next();
 
 }

@@ -1,7 +1,7 @@
 import { isInputDataValid } from '../helpers/inputValidator';
 import { createUser } from '../database/mongoCRUD/create_mongo';
 import { createUserNode } from '../database/neo4jCRUD/create_neo4j';
-import { verifyToken } from '../helpers/verifyToken';
+import { verifyGoogleToken } from '../helpers/verifyToken';
 const debug = require('debug')('app:signup');
 
 export const signup = async (req, res, next) => {
@@ -24,7 +24,7 @@ export const signup = async (req, res, next) => {
   }
 
   // Verify token
-  const userId = await verifyToken(userData.token);
+  const userId = await verifyGoogleToken(userData.token);
   debug(`User id: ${userId}`);
 
   const user = {

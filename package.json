@@ -34,6 +34,7 @@
     "express-validator": "^6.12.1",
     "google-auth-library": "^7.6.2",
     "helmet": "^4.6.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.5",
     "morgan": "^1.10.0",
     "neo4j-driver": "^4.3.2"

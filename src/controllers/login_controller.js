@@ -1,7 +1,8 @@
 import { isInputDataValid } from '../helpers/inputValidator';
 import { getUsernameFromEmail } from '../helpers/userHelper';
 import { checkIfUserExists } from '../database/mongoCRUD/read_mongo';
-import { verifyToken } from '../helpers/verifyToken';
+import { verifyGoogleToken } from '../helpers/verifyToken';
+import { createToken } from '../helpers/create_token';
 const debug = require('debug')('app:login');
 
 export const login = async (req, res) => {
@@ -15,7 +16,7 @@ export const login = async (req, res) => {
   };
 
   // Verify token
-  const userId = await verifyToken(userData.token);
+  const userId = await verifyGoogleToken(userData.token);
   debug(`User id: ${userId}`);
 
   // Validate input data
@@ -28,13 +29,22 @@ export const login = async (req, res) => {
   }
 
   // check if user exists on db
-  const isUserSaved = await checkIfUserExists(userId);
+  const savedUser = await checkIfUserExists(userId);
 
-  if (isUserSaved) {
+  if (savedUser) {
 
-    debug('User already exist... authenticate');
+    debug('User already exist... create access token');
 
-    return res.json({message: 'User exists => init authentication...'});
+    const accessToken = await createToken(userId);
+
+    return res.json({
+      message: 'User logged in',
+      token: accessToken,
+      userId: userId,
+      username: savedUser.username,
+      name: savedUser.name,
+      avatar: savedUser.avatar,
+    });
 
   }
   else {

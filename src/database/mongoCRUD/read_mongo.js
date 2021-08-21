@@ -5,10 +5,11 @@ const debug = require('debug')('app:mongo');
 export const checkIfUserExists = async (userId) => {
 
   try {
-    const user = await User.findById(userId).exec();
+    const userObj = ['_id', 'username', 'name', 'avatar', 'isPrivate'];
+    const user = await User.findById(userId, userObj).exec();
     if (user !== null) {
       debug(`user found: ${chalk.green(user.username)}`);
-      return true;
+      return user;
     }
     else {
       const err = new Error('Not found.');

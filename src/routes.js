@@ -4,6 +4,7 @@ const router = express.Router();
 // router callback functions:
 // User
 import { home } from './controllers/home_controller';
+import { access } from './controllers/access_controller';
 import { login } from './controllers/login_controller';
 import { signup } from './controllers/signup_controller';
 import { edit_user } from './controllers/edit_user_controller';
@@ -26,6 +27,7 @@ import { requireLogin } from './middleware/requireLogin';
 /* ------- HOME ------- */
 
 router.get('/', home);
+router.get('/api', access);
 
 /* ------- AUTH ------- */
 
