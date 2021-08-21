@@ -2,6 +2,7 @@ import { isInputDataValid } from '../helpers/inputValidator';
 import { createUser } from '../database/mongoCRUD/create_mongo';
 import { createUserNode } from '../database/neo4jCRUD/create_neo4j';
 import { verifyGoogleToken } from '../helpers/verifyToken';
+import { createToken } from '../helpers/create_token';
 const debug = require('debug')('app:signup');
 
 export const signup = async (req, res, next) => {
@@ -23,36 +24,40 @@ export const signup = async (req, res, next) => {
     return res.send({ message: err.message });
   }
 
-  // Verify token
-  const userId = await verifyGoogleToken(userData.token);
-  debug(`User id: ${userId}`);
-
-  const user = {
-    _id: userId,
-    name: userData.name,
-    username: userData.username,
-    avatar: userData.avatar,
-  };
 
   try {
 
     debug('Sign up...');
+
+    // Verify token
+    const userId = await verifyGoogleToken(userData.token);
+    debug(`User id: ${userId}`);
+
+    const user = {
+      _id: userId,
+      name: userData.name,
+      username: userData.username,
+      avatar: userData.avatar,
+    };
 
     // Save user on graph
     const userNode = await createUserNode(user);
 
     // Save user on db
     if (userNode) {
-      const newUser = await createUser(user);
 
-      // todo...
-      // send welcome email
-      // login
+      const newUser = await createUser(user);
+      const accessToken = await createToken(userId);
 
       return res.json({
-        message: 'User successfully created!',
-        user: newUser
+        message: 'User successfully created! User logged in!',
+        token: accessToken,
+        userId: userId,
+        username: newUser.username,
+        name: newUser.name,
+        avatar: newUser.avatar,
       });
+
     }
     else {
       const signupError = new Error("Error on creating user node.");
@@ -64,5 +69,4 @@ export const signup = async (req, res, next) => {
   catch (error) {
     return next(error);
   }
-
 };
