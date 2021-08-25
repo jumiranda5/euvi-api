@@ -1,6 +1,9 @@
 import User from '../models/userModel';
+import Follow from '../models/followModel';
 import chalk from 'chalk';
 const debug = require('debug')('app:mongo');
+
+/* ========== USER ========== */
 
 export const checkIfUserExists = async (userId) => {
 
@@ -50,7 +53,6 @@ export const findUser = async (userId) => {
   }
 };
 
-
 export const searchUser = async (search, page) => {
 
   debug(`Page: ${page}`);
@@ -64,5 +66,15 @@ export const searchUser = async (search, page) => {
 
   debug(users);
   return users;
+
+};
+
+
+/* ========== FOLLOWS ========== */
+
+export const findFollowsByIdList = async (idList) => {
+
+  const follows = await Follow.find({"_id" : { $in : idList} }, ["to"]).exec();
+  return follows;
 
 };

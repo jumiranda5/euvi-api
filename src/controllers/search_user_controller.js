@@ -1,15 +1,13 @@
 import { isInputDataValid } from '../helpers/inputValidator';
-import { searchUser } from '../database/mongoCRUD/read_mongo';
+import { searchUser, findFollowsByIdList } from '../database/mongoCRUD/read_mongo';
 import chalk from 'chalk';
 const debug = require('debug')('app:search');
 
 export const search_user = async (req, res, next) => {
 
   const search = req.body.search.toLowerCase();
-  //const userId = req.params.userId;
+  const userId = req.params.userId;
   const page = req.params.page;
-
-  debug(`Search key: ${chalk.yellow(search)} / Page: ${chalk.yellow(page)}`);
 
   // validate input data
   const isDataValid = isInputDataValid(req);
@@ -20,14 +18,47 @@ export const search_user = async (req, res, next) => {
     return res.send({ message: err.message });
   }
 
-  debug('Search user on db...');
+  debug(`Search key: ${chalk.yellow(search)} / Page: ${chalk.yellow(page)}`);
 
   const users = await searchUser(search, page);
 
   if(users.length !== 0) {
-    return res.json(users);
+
+    // Build follows ids list to find follows
+    const followIds = [];
+    for (let i = 0; i < users.length; i++) {
+      followIds.push(`${userId}=>${users[i]._id}`);
+    }
+
+    // Find follows
+    const follows = await findFollowsByIdList(followIds);
+
+    // Build search result user object list
+    const searchResult = [];
+
+    for (let i = 0; i < users.length; i++) {
+      const user = {
+        _id: users[i]._id,
+        name:  users[i].name,
+        avatar:  users[i].avatar,
+        username:  users[i].username,
+        following: false
+      };
+
+      for (let i2 = 0; i2 < follows.length; i2++) {
+        if(users[i]._id === follows[i2].to) {
+          debug(`${userId} is following ${users[i].username}`);
+          user.following = true;
+        }
+      }
+      searchResult.push(user);
+    }
+
+    debug(`Search result: ${searchResult}`);
+
+    return res.json(searchResult);
   }
-  else {
-    return res.json({message: 'No users found.'});
-  }
+
+  else return res.json({message: 'No users found.'});
+
 };
