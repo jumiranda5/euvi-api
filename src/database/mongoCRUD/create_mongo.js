@@ -1,5 +1,8 @@
 import User from '../models/userModel';
+import Follow from '../models/followModel';
 const debug = require('debug')('app:mongo');
+
+/* ========== USER ========== */
 
 export const createUser = async (userData) => {
   try {
@@ -23,4 +26,25 @@ export const createUser = async (userData) => {
     }
     else throw error;
   }
+};
+
+/* ========== FOLLOW ========== */
+
+export const createFollowDocument = async (from, to) => {
+
+  const _id = `${from}=>${to}`;
+
+  try {
+    const follow = await Follow.create({_id, from, to});
+    debug(`User ${from} followed ${to}`);
+    return follow;
+  }
+  catch (error) {
+
+    debug(`Error code: ${error.code}`);
+    debug(`Error message: ${error.message}`);
+
+    throw error;
+  }
+
 };

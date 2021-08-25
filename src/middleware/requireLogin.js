@@ -2,6 +2,8 @@ import { verifyAccessToken } from '../helpers/verifyToken';
 
 export function requireLogin(req, res, next) {
 
+  // TODO...
+
   /*
   const token = req.body.token;
 

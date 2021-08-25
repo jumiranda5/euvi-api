@@ -42,10 +42,10 @@ export const createFollow = async (from, to) => {
       tx.run(`
         MATCH (from:User), (to:User)
         WHERE from.userId = '${from}' AND to.userId = '${to}'
-        MERGE (from)-[r:follows]->(to)
+        MERGE (from)-[r:FOLLOWS]->(to)
       `)
     );
-    debug(`Follow created`);
+    debug(`Follow created on neo4j`);
   }
   catch (error) {
     debug(error);

@@ -35,6 +35,8 @@ export const login = async (req, res) => {
 
     debug('User already exist... create access token');
 
+    // TODO: add session id to user model, add it to access token <= <= <=
+    // change sid on each login to revoke previous access (?)
     const accessToken = await createToken(userId);
 
     return res.json({

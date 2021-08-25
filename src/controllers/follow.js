@@ -1,4 +1,5 @@
 import { createFollow } from '../database/neo4jCRUD/create_neo4j';
+import { createFollowDocument } from '../database/mongoCRUD/create_mongo';
 const debug = require('debug')('app:follow');
 
 export const follow = async (req, res, next) => {
@@ -11,7 +12,10 @@ export const follow = async (req, res, next) => {
     const from = req.params.userId;
     debug(`User: ${ from } following ${ to }`);
 
-    await createFollow(from, to);
+    await Promise.all([
+      createFollow(from, to),
+      createFollowDocument(from, to)
+    ]);
 
     debug('Follow relationship created!');
 
@@ -20,4 +24,5 @@ export const follow = async (req, res, next) => {
   catch (error){
     return next(error);
   }
+
 };
