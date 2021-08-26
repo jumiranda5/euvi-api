@@ -13,7 +13,10 @@ export const followers = async (req, res, next) => {
 
     const followersList = await findFollowers(userId);
 
-    return res.json({followers: followersList});
+    return res.json({
+      message: `Found ${followersList.length} followers.`,
+      result: followersList
+    });
 
   }
   catch (error) {

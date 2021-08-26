@@ -40,7 +40,7 @@ export const search_user = async (req, res, next) => {
 
     for (let i = 0; i < users.length; i++) {
       const user = {
-        _id: users[i]._id,
+        userId: users[i]._id,
         name:  users[i].name,
         avatar:  users[i].avatar,
         username:  users[i].username,

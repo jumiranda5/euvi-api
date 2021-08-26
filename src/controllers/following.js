@@ -1,4 +1,4 @@
-import { findFollows } from '../database/neo4jCRUD/read_neo4j';
+import { findFollowing } from '../database/neo4jCRUD/read_neo4j';
 const debug = require('debug')('app:follow');
 
 export const following = async (req, res, next) => {
@@ -11,9 +11,12 @@ export const following = async (req, res, next) => {
 
   try {
 
-    const followsList = await findFollows(userId);
+    const followingList = await findFollowing(userId);
 
-    return res.json({Following: followsList});
+    return res.json({
+      message: `Found ${followingList.length} follows.`,
+      result: followingList
+    });
 
   }
   catch (error) {

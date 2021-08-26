@@ -34,7 +34,7 @@ export const findFollowers = async (userId) => {
   try {
     const result = await graphSession.readTransaction(tx =>
       tx.run(`
-        MATCH (n:User{userId:'${userId}'})<-[:follows]-(followers)
+        MATCH (n:User{userId:'${userId}'})<-[:FOLLOWS]-(followers)
         RETURN followers`)
     );
 
@@ -64,7 +64,7 @@ export const findFollowers = async (userId) => {
 
 };
 
-export const findFollows = async (userId) => {
+export const findFollowing = async (userId) => {
 
   const graphSession = graphDriver.session();
 
@@ -73,7 +73,7 @@ export const findFollows = async (userId) => {
   try {
     const result = await graphSession.readTransaction(tx =>
       tx.run(`
-        MATCH (n:User{userId:'${userId}'})-[:follows]->(following)
+        MATCH (n:User{userId:'${userId}'})-[:FOLLOWS]->(following)
         RETURN following`)
     );
 
@@ -164,7 +164,7 @@ export const checkIfFollowing = async (profileId, visitorId) => {
   try {
     const result = await graphSession.readTransaction(tx =>
       tx.run(`
-        MATCH (a:User{userId:'${visitorId}'})-[r:follows]->(b:User{userId:'${profileId}'})
+        MATCH (a:User{userId:'${visitorId}'})-[r:FOLLOWS]->(b:User{userId:'${profileId}'})
         RETURN r`)
     );
 

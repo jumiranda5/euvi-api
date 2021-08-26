@@ -1,5 +1,4 @@
-import { findUser } from '../database/mongoCRUD/read_mongo';
-import { countFollowers, countFollows, checkIfFollowing } from '../database/neo4jCRUD/read_neo4j';
+import { findUser, countFollowDocuments, findFollowDocument } from '../database/mongoCRUD/read_mongo';
 const debug = require('debug')('app:profile');
 
 export const profile = async (req, res, next) => {
@@ -16,12 +15,6 @@ export const profile = async (req, res, next) => {
   let isFollowing;
   let responses;
 
-  // get user info from mongo
-  // count posts on mongo (todo)
-  // count followers on neo4j
-  // count follows on neo4j
-  // find follow on neo4j (visiting other profile)
-
   try {
 
     if (visitor === userId) {
@@ -33,10 +26,8 @@ export const profile = async (req, res, next) => {
 
       responses = await Promise.all([
         findUser(userId),
-        countFollowers(userId),
-        countFollows(userId)
+        countFollowDocuments(userId)
       ]);
-
 
     }
     else {
@@ -47,21 +38,20 @@ export const profile = async (req, res, next) => {
 
       responses = await Promise.all([
         findUser(userId),
-        countFollowers(userId),
-        countFollows(userId),
-        checkIfFollowing(userId, visitor)
+        countFollowDocuments(userId),
+        findFollowDocument(userId, visitor)
       ]);
 
-      isFollowing = responses[3];
+      isFollowing = responses[2];
 
     }
 
     const user = responses[0];
-    const followers = responses[1];
-    const following = responses[2];
+    const followers = responses[1].followers;
+    const following = responses[1].following;
 
     return res.json({
-      message: 'User found!',
+      message: `User found! Profile of ${user.username}`,
       isOwnProfile,
       isFollowing,
       user,

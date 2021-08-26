@@ -30,7 +30,7 @@ export const signup = async (req, res, next) => {
     debug('Sign up...');
 
     // Verify token
-    const userId = userData.token;//await verifyGoogleToken(userData.token);
+    const userId = await verifyGoogleToken(userData.token);
     debug(`User id: ${userId}`);
 
     const user = {

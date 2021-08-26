@@ -29,7 +29,7 @@ export const deleteFollow = async (from, to) => {
   try {
     await graphSession.readTransaction(tx =>
       tx.run(`
-        MATCH (from:User{userId:'${from}'})-[r:follows]->(to:User{userId:'${to}'})
+        MATCH (from:User{userId:'${from}'})-[r:FOLLOWS]->(to:User{userId:'${to}'})
         DELETE r`)
     );
 

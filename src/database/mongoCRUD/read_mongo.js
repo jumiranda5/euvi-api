@@ -78,3 +78,77 @@ export const findFollowsByIdList = async (idList) => {
   return follows;
 
 };
+
+export const countFollowDocuments = async (userId) => {
+
+  let followersCount;
+  let followingCount;
+
+  const counts = await Follow.aggregate([
+    { "$facet": {
+      "following": [
+        { "$match": { "from": userId } },
+        { "$group": { "_id": null, n: { "$sum": 1 } } }
+      ],
+      "followers": [
+        { "$match": { "to": userId } },
+        { "$group": { "_id": null, n: { "$sum": 1 } } }
+      ]
+    }}
+  ]);
+
+  debug(`Counts: ${JSON.stringify(counts)}`);
+
+  if (counts[0].following[0]) { followingCount = counts[0].following[0].n;}
+  else followingCount = 0;
+
+  if (counts[0].followers[0]) followersCount = counts[0].followers[0].n;
+  else followersCount = 0;
+
+  const followCountObj = {
+    followers: followersCount,
+    following: followingCount
+  }
+
+  return followCountObj;
+
+};
+
+export const findFollowDocument = async (profileId, visitorId) => {
+
+  const followId = `${visitorId}=>${profileId}`;
+
+  try {
+    const follow = await Follow.findById(followId, ['_id']).exec();
+    if (follow !== null) {
+      debug(`follow document found: ${chalk.green(follow._id)}`);
+      return true;
+    }
+    else return false;
+  }
+  catch (error) {
+    debug(error.message);
+    return false;
+  }
+
+};
+
+export const findFollowersDocuments = async (userId) => {
+
+  const followers = await Follow.find({to: userId}, ['from']).exec();
+
+  debug(`Found ${followers.length} follows.`);
+
+  return followers;
+
+};
+
+export const findFollowingDocuments = async (userId) => {
+
+  const follows = await Follow.find({from: userId}, ['to']).exec();
+
+  debug(`Found ${follows.length} follows.`);
+
+  return follows;
+
+};
