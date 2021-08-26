@@ -3,11 +3,10 @@ import { createUser } from '../database/mongoCRUD/create_mongo';
 import { createUserNode } from '../database/neo4jCRUD/create_neo4j';
 import { verifyGoogleToken } from '../helpers/verifyToken';
 import { createToken } from '../helpers/create_token';
+import { generateUserObject } from '../helpers/userHelper';
 const debug = require('debug')('app:signup');
 
 export const signup = async (req, res, next) => {
-
-  // TODO: createUserSearchKeys
 
   // Input data
   const userData = {
@@ -26,13 +25,12 @@ export const signup = async (req, res, next) => {
     return res.send({ message: err.message });
   }
 
-
   try {
 
     debug('Sign up...');
 
     // Verify token
-    const userId = await verifyGoogleToken(userData.token);
+    const userId = userData.token;//await verifyGoogleToken(userData.token);
     debug(`User id: ${userId}`);
 
     const user = {
@@ -48,7 +46,9 @@ export const signup = async (req, res, next) => {
     // Save user on db
     if (userNode) {
 
-      const newUser = await createUser(user);
+      const userObject = await generateUserObject(user);
+
+      const newUser = await createUser(userObject);
       const accessToken = await createToken(userId);
 
       return res.json({

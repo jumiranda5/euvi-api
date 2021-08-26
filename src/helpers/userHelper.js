@@ -4,14 +4,14 @@ const debug = require('debug')('app:user_helper');
 export const generateUserObject = async (userData) => {
 
   // create username from email
-  const username = getUsernameFromEmail(userData.email);
+  // const username = getUsernameFromEmail(userData.email);
 
   // create search keys
-  const searchKeys = await getUserSearchKeys(username, userData.name);
+  const searchKeys = await getUserSearchKeys(userData.username, userData.name);
 
   const userObject = {
-    _id: userData.userId,
-    username: username,
+    _id: userData._id,
+    username: userData.username,
     name: userData.name,
     avatar: userData.avatar,
     searchKeys: searchKeys
