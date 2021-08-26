@@ -39,7 +39,7 @@ router.post('/api/signup', validateEditUser, signup);
 router.get('/api/user/profile/:userId/:visitor', requireLogin, profile);
 router.post('/api/user/edit-user/:userId', [requireLogin, validateEditUser], edit_user);
 router.post('/api/user/delete-account/:userId', requireLogin, delete_account);
-router.post('/api/user/search/:userId/:page', [requireLogin, validateSearch], search_user);
+router.post('/api/user/search/:userId/:page/:search', [requireLogin, validateSearch], search_user);
 
 /* ------- FOLLOWS ------- */
 

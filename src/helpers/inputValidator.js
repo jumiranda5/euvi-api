@@ -1,4 +1,4 @@
-import { body, validationResult } from 'express-validator';
+import { body, param, validationResult } from 'express-validator';
 const debug = require('debug')('app:validator');
 
 /*eslint dot-location: 0*/
@@ -43,7 +43,7 @@ export const validateEditUser = [
 ];
 
 export const validateSearch = [
-  body('search')
+  param('search')
     .matches(/^[^"<>\\{}[\]]{1,200}$/u)
     .withMessage('Invalid search')
     .trim()

@@ -7,6 +7,8 @@ const debug = require('debug')('app:signup');
 
 export const signup = async (req, res, next) => {
 
+  // TODO: createUserSearchKeys
+
   // Input data
   const userData = {
     token: req.body.token,

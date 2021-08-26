@@ -5,11 +5,13 @@ const debug = require('debug')('app:search');
 
 export const search_user = async (req, res, next) => {
 
-  const search = req.body.search.toLowerCase();
+  // Android retrofit adding extra quote when sending search key on the request body
+  // moved search key to params...
+
+  const search = req.params.search.toLowerCase();
   const userId = req.params.userId;
   const page = req.params.page;
 
-  // validate input data
   const isDataValid = isInputDataValid(req);
   if (!isDataValid) {
     const err = new Error('Validation error.');
@@ -54,9 +56,12 @@ export const search_user = async (req, res, next) => {
       searchResult.push(user);
     }
 
-    debug(`Search result: ${searchResult}`);
+    debug(`Search result: ${JSON.stringify(searchResult)}`);
 
-    return res.json(searchResult);
+    return res.json({
+      message: `Found ${searchResult.length} users.`,
+      result: searchResult
+    });
   }
 
   else return res.json({message: 'No users found.'});
