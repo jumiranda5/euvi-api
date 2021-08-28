@@ -18,7 +18,7 @@ import { following } from './controllers/following';
 import { unfollow } from './controllers/unfollow';
 // Search TMDB
 import { search_tmdb_multi } from './controllers/search_multi_controller';
-
+import { item_search_multi } from './controllers/tmdb_item_controller';
 
 // todo: middleware to validate api key
 import { validateLogin, validateEditUser, validateSearch } from './middleware/inputValidator';
@@ -52,5 +52,6 @@ router.post('/api/unfollow/:userId/:to', unfollow);
 
 /* -------- TMDB -------- */
 router.get('/api/search/multi/:query/:page/:lang', search_tmdb_multi);
+router.get('/api/tmdb/item/:type/:itemId/:lang', item_search_multi);
 
 module.exports = router;

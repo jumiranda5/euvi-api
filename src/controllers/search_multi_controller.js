@@ -18,10 +18,12 @@ export const search_tmdb_multi = async (req, res, next) => {
   const language = `language=${lang}`;
   const q = `query=${query}`;
 
-  const route = `${searchRoute}/${mediaType}?${key}&${language}&${page}&include_adult=false&${q}`;
+  const route = `${searchRoute}/${mediaType}?${key}&${language}&page=${page}&include_adult=false&${q}`;
 
   try {
     const response = await axios(get(route));
+
+    debug(response.data);
 
     const page = response.data.page;
     const total_pages = response.data.total_pages;
@@ -49,7 +51,7 @@ export const search_tmdb_multi = async (req, res, next) => {
 const responseObjectsArray = (responseData) => {
 
   //"poster_sizes":["w92","w154","w185","w342","w500","w780","original"]
-  // Some responses have 'name' and 'first_air_date' instead of 'title' and 'release_date'
+  // Tv responses have 'name' and 'first_air_date' instead of 'title' and 'release_date'
 
   return new Promise((resolve, reject) => {
 
@@ -64,14 +66,16 @@ const responseObjectsArray = (responseData) => {
         if (responseData[i].media_type !== "person") {
 
           const data = {
+            title: responseData[i].title || '',
+            name: responseData[i].name || '',
+            adult: responseData[i].adult,
             id: responseData[i].id,
             media_type: responseData[i].media_type,
             overview: responseData[i].overview,
-            title: responseData[i].title,
-            release_date: responseData[i].release_date,
+            release_date: responseData[i].release_date || '',
+            first_air_date: responseData[i].first_air_date || '',
             poster: `https://image.tmdb.org/t/p/w185${responseData[i].poster_path}`,
-            name: responseData[i].name,
-            first_air_date: responseData[i].first_air_date
+            popularity: responseData[i].popularity
           };
 
           responseArray.push(data);
@@ -79,6 +83,9 @@ const responseObjectsArray = (responseData) => {
         }
 
       }
+
+      responseArray.sort((a,b) => { return a.popularity - b.popularity; });
+      responseArray.reverse();
 
       resolve(responseArray);
     }
