@@ -27,7 +27,7 @@ const config = {
   },
   CLIENT_ID: process.env.CLIENT_ID,
   TOKEN_SECRET: process.env.TOKEN_SECRET,
-
+  TMDB_API_KEY: process.env.TMDB_API_KEY
 };
 
 export default config;

@@ -26,6 +26,7 @@
   "author": "Juliana Miranda",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.21.1",
     "chalk": "^4.1.2",
     "cors": "^2.8.5",
     "debug": "^4.3.2",

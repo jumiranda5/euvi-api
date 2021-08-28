@@ -1,4 +1,4 @@
-import { isInputDataValid } from '../helpers/inputValidator';
+import { isInputDataValid } from '../middleware/inputValidator';
 import { getUsernameFromEmail } from '../helpers/userHelper';
 import { checkIfUserExists } from '../database/mongoCRUD/read_mongo';
 import { verifyGoogleToken } from '../helpers/verifyToken';

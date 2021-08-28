@@ -1,4 +1,4 @@
-import { isInputDataValid } from '../helpers/inputValidator';
+import { isInputDataValid } from '../middleware/inputValidator';
 import { searchUser, findFollowsByIdList } from '../database/mongoCRUD/read_mongo';
 import chalk from 'chalk';
 const debug = require('debug')('app:search');

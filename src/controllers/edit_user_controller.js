@@ -1,4 +1,4 @@
-import { isInputDataValid } from '../helpers/inputValidator';
+import { isInputDataValid } from '../middleware/inputValidator';
 import { getUserSearchKeys } from '../helpers/userHelper';
 import { updateUser } from '../database/mongoCRUD/update_mongo';
 import chalk from 'chalk';

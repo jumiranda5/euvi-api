@@ -16,10 +16,12 @@ import { follow } from './controllers/follow';
 import { followers } from './controllers/followers';
 import { following } from './controllers/following';
 import { unfollow } from './controllers/unfollow';
+// Search TMDB
+import { search_tmdb_multi } from './controllers/search_multi_controller';
 
 
 // todo: middleware to validate api key
-import { validateLogin, validateEditUser, validateSearch } from './helpers/inputValidator';
+import { validateLogin, validateEditUser, validateSearch } from './middleware/inputValidator';
 import { requireLogin } from './middleware/requireLogin';
 
 // todo: middleware to require login
@@ -47,5 +49,8 @@ router.get('/api/following/:userId', following);
 router.get('/api/followers/:userId', followers);
 router.post('/api/follow/:userId/:to', follow);
 router.post('/api/unfollow/:userId/:to', unfollow);
+
+/* -------- TMDB -------- */
+router.get('/api/search/multi/:query/:page/:lang', search_tmdb_multi);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-import { isInputDataValid } from '../helpers/inputValidator';
+import { isInputDataValid } from '../middleware/inputValidator';
 import { createUser } from '../database/mongoCRUD/create_mongo';
 import { createUserNode } from '../database/neo4jCRUD/create_neo4j';
 import { verifyGoogleToken } from '../helpers/verifyToken';
